@@ -11,4 +11,5 @@ app = dash.Dash(server=server,
                 external_stylesheets=[dbc.themes.BOOTSTRAP, FONT_AWESOME], 
                 suppress_callback_exceptions=True)
 
+
 #server = app.server

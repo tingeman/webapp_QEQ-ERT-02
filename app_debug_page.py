@@ -2,11 +2,9 @@ import numpy
 import pandas
 from flask import Flask
 import dash
-from dash import dcc
-from dash import html
-from dash import dash_table
+from dash import dcc, html, Input, Output, State
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output, State
+from dash import dash_table
 import plotly.express as px
 import re
 
@@ -26,7 +24,7 @@ except ImportError:
     import pdb as ipdb
 
 from app import app
-
+from config import settings
 
 # conda install -c conda-forge dash-table
 # conda install -c conda-forge dash-bootstrap-components
@@ -38,12 +36,9 @@ from app import app
 re_pattern = re.compile('([0-9]+)([a-zA-Z]+)')
 
 # Define file paths
-#supply_dat_file = pathlib.Path('./supply_voltage.dat')
-task_info_file = info_db_file = pathlib.Path('./QEQ-ERT-02_task_info.ftr')
-ls_log_file = pathlib.Path('./logfile')
-#ls_log_file = pathlib.Path(r'D:\data\artek\stations\QEQ-ERT-02-PC\from_terrameter\home_root\logfile')
-#supply_dat_file = pathlib.Path(r'D:\data\artek\stations\QEQ-ERT-02-PC\home_root\scripts\io_scripts\supply_voltage.dat')
-supply_dat_ftr_file = pathlib.Path(r'./supply_voltage.ftr')
+task_info_file = settings.TASK_INFO_FILE
+ls_log_file = settings.LS_LOG_FILE
+supply_dat_ftr_file = settings.SUPPLY_DAT_FTR_FILE
 
 
 # =====================================================================

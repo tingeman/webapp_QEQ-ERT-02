@@ -4,20 +4,22 @@ import numpy as np
 import pandas as pd
 
 import dash
-from dash import Input, Output, dcc, html
+from dash import dcc, html, Input, Output, State
 import dash_bootstrap_components as dbc
+
 try:
     import ipdb as pdb
 except:
     import pdb
 
 from app import app
+from config import settings
 
-STATIC_PREFIX = './static/'
-GRADIENT_INVERSION_PATH = STATIC_PREFIX + 'ert_inversions/gradient_new/'
+GRADIENT_INVERSION_PATH = settings.GRADIENT_INVERSION_PATH
+TASK_INFO_FILE = settings.TASK_INFO_FILE
+BAT_STATS_FILE = settings.BAT_STATS_FILE
+COMPLETED_PCT = settings.COMPLETED_PCT
 
-TASK_INFO_FILE = info_db_file = pathlib.Path('./QEQ-ERT-02_task_info.ftr')
-BAT_STATS_FILE = pathlib.Path('./battery_stats.ftr')
 
 TASK_INFO_DF = pd.read_feather(TASK_INFO_FILE)
 
@@ -28,8 +30,6 @@ date_ids = dict(zip(date_range, range(len(date_range))))
 TASK_INFO_DF['proj_date_id'] = TASK_INFO_DF['proj_date'].apply(lambda x: date_ids[x])
 
 BAT_STATS_DF = pd.read_feather(BAT_STATS_FILE)
-
-COMPLETED_PCT = 20
 
 def filter_acquisitions(config='gradient', completed_pct=COMPLETED_PCT):
     df = TASK_INFO_DF[(TASK_INFO_DF.configuration==config) & (TASK_INFO_DF.completed_pct>=completed_pct)]
@@ -89,15 +89,15 @@ def get_image(completed_pct=COMPLETED_PCT):
 
     proj_name = df[df['proj_date_id']==min_id].iloc[0]['proj_name']
 
-    filename_2s = pathlib.Path(GRADIENT_INVERSION_PATH) / (proj_name+'_grad_2s.png')
-    filename_1s = pathlib.Path(GRADIENT_INVERSION_PATH) / (proj_name+'_grad_1s.png')
+    filename_2s = GRADIENT_INVERSION_PATH / (proj_name+'_grad_2s.png')
+    filename_1s = GRADIENT_INVERSION_PATH / (proj_name+'_grad_1s.png')
     if filename_2s.exists():
-        url = GRADIENT_INVERSION_PATH + proj_name + '_grad_2s.png'
+        url = GRADIENT_INVERSION_PATH / (proj_name + '_grad_2s.png')
     if filename_1s.exists():    
-        url = GRADIENT_INVERSION_PATH + proj_name + '_grad_1s.png'
+        url = GRADIENT_INVERSION_PATH / (proj_name + '_grad_1s.png')
     else:
-        url = GRADIENT_INVERSION_PATH + 'no_inversion.png'
-    layout = html.Img(src=url, width='100%')
+        url = GRADIENT_INVERSION_PATH / 'no_inversion.png'
+    layout = html.Img(src=str(url), width='100%')
 
     return layout
     
@@ -331,12 +331,12 @@ def populate_image(mydate, value, prev_clicks, next_clicks):
             filename_2s = pathlib.Path(GRADIENT_INVERSION_PATH) / (proj_name+'_grad_2s.png')
             filename_1s = pathlib.Path(GRADIENT_INVERSION_PATH) / (proj_name+'_grad_1s.png')
             if filename_2s.exists():
-                url = GRADIENT_INVERSION_PATH + proj_name + '_grad_2s.png'
+                url = GRADIENT_INVERSION_PATH / (proj_name + '_grad_2s.png')
             if filename_1s.exists():    
-                url = GRADIENT_INVERSION_PATH + proj_name + '_grad_1s.png'
+                url = GRADIENT_INVERSION_PATH / (proj_name + '_grad_1s.png')
             else:
-                url = GRADIENT_INVERSION_PATH + 'no_inversion.png'
-            layout = html.Img(src=url, width='100%')
+                url = GRADIENT_INVERSION_PATH / ('no_inversion.png')
+            layout = html.Img(src=str(url), width='100%')
 
             # Get datapoints_stats output
             datapoints_stats = '{0}/{0}'.format(df.iloc[idx[0]]['nDipoles'], df.iloc[idx[0]]['nominal'])

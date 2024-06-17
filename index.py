@@ -1,9 +1,10 @@
-from dash import Input, Output, dcc, html
+from dash import dcc, html, Input, Output, State
 import dash_bootstrap_components as dbc
 
 from app import app, server
 import app1, app2, app_debug_page
 
+from config import run_server_settings
 
 app.title = "QEQ-ERT-02"
 
@@ -73,4 +74,4 @@ def render_page_content(pathname):
 
 if __name__ == "__main__":
     #app.run_server(port=8888, debug=True)
-    app.run_server(debug=True)
+    app.run_server(debug=run_server_settings.DEBUG)
