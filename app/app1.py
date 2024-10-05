@@ -16,6 +16,7 @@ from app import app
 from config import settings
 
 GRADIENT_INVERSION_PATH = settings.GRADIENT_INVERSION_PATH
+GRADIENT_INVERSION_URL = settings.GRADIENT_INVERSION_URL
 TASK_INFO_FILE = settings.TASK_INFO_FILE
 BAT_STATS_FILE = settings.BAT_STATS_FILE
 COMPLETED_PCT = settings.COMPLETED_PCT
@@ -89,14 +90,20 @@ def get_image(completed_pct=COMPLETED_PCT):
 
     proj_name = df[df['proj_date_id']==min_id].iloc[0]['proj_name']
 
+    print('Debug information: ')
+    print('')
+    print(df[df['proj_date_id']==min_id].iloc[0])
+
     filename_2s = GRADIENT_INVERSION_PATH / (proj_name+'_grad_2s.png')
     filename_1s = GRADIENT_INVERSION_PATH / (proj_name+'_grad_1s.png')
     if filename_2s.exists():
-        url = GRADIENT_INVERSION_PATH / (proj_name + '_grad_2s.png')
+        url = GRADIENT_INVERSION_URL / (proj_name + '_grad_2s.png')
     if filename_1s.exists():    
-        url = GRADIENT_INVERSION_PATH / (proj_name + '_grad_1s.png')
+        url = GRADIENT_INVERSION_URL / (proj_name + '_grad_1s.png')
     else:
-        url = GRADIENT_INVERSION_PATH / 'no_inversion.png'
+        print('Filename 1s: ', filename_1s)
+        print('Filename 2s: ', filename_2s)
+        url = GRADIENT_INVERSION_URL / 'no_inversion.png'
     layout = html.Img(src=str(url), width='100%')
 
     return layout
@@ -330,12 +337,17 @@ def populate_image(mydate, value, prev_clicks, next_clicks):
             proj_name = df.iloc[idx[0]]['proj_name']
             filename_2s = pathlib.Path(GRADIENT_INVERSION_PATH) / (proj_name+'_grad_2s.png')
             filename_1s = pathlib.Path(GRADIENT_INVERSION_PATH) / (proj_name+'_grad_1s.png')
+
+            print('Debug information: ')
+            print('Filename 1s: ', filename_1s.absolute())
+            print('Filename 2s: ', filename_2s.absolute())
+
             if filename_2s.exists():
-                url = GRADIENT_INVERSION_PATH / (proj_name + '_grad_2s.png')
+                url = GRADIENT_INVERSION_URL / (proj_name + '_grad_2s.png')
             if filename_1s.exists():    
-                url = GRADIENT_INVERSION_PATH / (proj_name + '_grad_1s.png')
+                url = GRADIENT_INVERSION_URL / (proj_name + '_grad_1s.png')
             else:
-                url = GRADIENT_INVERSION_PATH / ('no_inversion.png')
+                url = GRADIENT_INVERSION_URL / ('no_inversion.png')
             layout = html.Img(src=str(url), width='100%')
 
             # Get datapoints_stats output

@@ -13,6 +13,7 @@ class RunServerSettings(BaseSettings):
 
 class ConfigSettings(BaseSettings):
     GRADIENT_INVERSION_PATH: Path = Field(..., env="GRADIENT_INVERSION_PATH")
+    GRADIENT_INVERSION_URL: Path = Field(..., env="GRADIENT_INVERSION_URL")
     TASK_INFO_FILE: Path = Field(..., env="TASK_INFO_FILE")
     BAT_STATS_FILE: Path = Field(..., env="BAT_STATS_FILE")
     LS_LOG_FILE: Path = Field(..., env="LS_LOG_FILE")

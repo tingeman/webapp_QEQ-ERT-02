@@ -69,9 +69,9 @@ times[0] = start_end[0]
 vals[0] = 0
 for i in range(1, len(start_end)-1, 2):
     times[i*2-1:i*2-1+4] = start_end[[i, i, i+1, i+1]]
-    vals[i*2-1:i*2-1+4] = 0, np.NaN, np.NaN, 0
+    vals[i*2-1:i*2-1+4] = 0, np.nan, np.nan, 0
 times[[i*2+3, i*2+4]] = start_end[[i+1, i+2]]
-vals[[i*2+3, i*2+4]] = 0, np.NaN
+vals[[i*2+3, i*2+4]] = 0, np.nan
 
 timeline = pd.DataFrame([times, vals]).T
 timeline.columns = ['Time', 'Value']

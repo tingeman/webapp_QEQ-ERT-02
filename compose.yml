@@ -1,0 +1,20 @@
+services:
+  webapp_qeqert02:
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - ../00_static_data/webapp_QEQ-ERT-02:/web_data
+    ports:
+      - 8050:8050
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    environment:
+      - FLASK_ENV=development
+
+
+
+
+# To (re)build images:       docker compose -f compose.yml build
+# To run/start images:       docker compose -f compose.yml up
+# To run/start images and leave running: docker compose -f compose.yml up --detach     (or -d)
+# To enter specific image:   docker compose exec -ti webapp_qeqert02 /bin/bash
