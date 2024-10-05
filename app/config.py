@@ -25,7 +25,7 @@ class ConfigSettings(BaseSettings):
 
 
 def load_environment():
-    env = os.getenv('FLASK_ENV', 'development')
+    env = os.getenv('APP_ENV', 'production')
     env_file = f".env.{env}"
     
     if not os.path.exists(env_file):

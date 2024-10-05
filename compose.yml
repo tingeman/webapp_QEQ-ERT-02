@@ -9,7 +9,7 @@ services:
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     environment:
-      - FLASK_ENV=development
+      - APP_ENV=production
 
 
 
