@@ -37,9 +37,9 @@ sidebar = html.Div(
         ),
         dbc.Nav(
             [
-                dbc.NavLink("Home", href="/", active="exact"),
-                dbc.NavLink("Data Acquisitions", href="/app1", active="exact"),
-                dbc.NavLink("Debug information", href="/debug", active="exact"),
+                dbc.NavLink("Home", href="/app/qeq-ert-02/", active="exact"),
+                dbc.NavLink("Data Acquisitions", href="/app/qeq-ert-02/app1", active="exact"),
+                dbc.NavLink("Debug information", href="/app/qeq-ert-02/debug", active="exact"),
             ],
             vertical=True,
             pills=True,
@@ -56,11 +56,18 @@ app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
 @app.callback(Output("page-content", "children"), 
               Input("url", "pathname"))
 def render_page_content(pathname):
-    if pathname == "/":
-        return html.P("This is the content of the home page!")
-    elif pathname == "/app1":
+    if pathname == "/app/qeq-ert-02/" or pathname == "/app/qeq-ert-02":
+        return html.Div(
+            [   
+                html.H1("Welcome to the QEQ-ERT-02 explorer!"),
+                html.Hr(),
+                html.P("This page should contain a description of the measurement system, its purpose and location, and the data that is available."),
+                html.Hr(),
+                html.P("Navigate using the links on the left. Be patient, page loading is slow due to the large amounts of data.")
+            ])
+    elif pathname == "/app/qeq-ert-02/app1":
         return app1.LAYOUT
-    elif pathname == "/debug":
+    elif pathname == "/app/qeq-ert-02/debug":
         return app_debug_page.LAYOUT
     # If the user tries to reach a different page, return a 404 message
     return dbc.Container(

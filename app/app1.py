@@ -94,16 +94,19 @@ def get_image(completed_pct=COMPLETED_PCT):
     print('')
     print(df[df['proj_date_id']==min_id].iloc[0])
 
-    filename_2s = GRADIENT_INVERSION_PATH / (proj_name+'_grad_2s.png')
-    filename_1s = GRADIENT_INVERSION_PATH / (proj_name+'_grad_1s.png')
+    filename_2s = (GRADIENT_INVERSION_PATH / (proj_name+'_grad_2s.png')).resolve()
+    filename_1s = (GRADIENT_INVERSION_PATH / (proj_name+'_grad_1s.png')).resolve()
     if filename_2s.exists():
         url = GRADIENT_INVERSION_URL / (proj_name + '_grad_2s.png')
     if filename_1s.exists():    
         url = GRADIENT_INVERSION_URL / (proj_name + '_grad_1s.png')
     else:
+        print('None of the following files exist')
         print('Filename 1s: ', filename_1s)
         print('Filename 2s: ', filename_2s)
         url = GRADIENT_INVERSION_URL / 'no_inversion.png'
+
+    print('Constructed URL: ', url)
     layout = html.Img(src=str(url), width='100%')
 
     return layout
@@ -335,18 +338,19 @@ def populate_image(mydate, value, prev_clicks, next_clicks):
         if len(idx) > 0:
             # Get image file
             proj_name = df.iloc[idx[0]]['proj_name']
-            filename_2s = pathlib.Path(GRADIENT_INVERSION_PATH) / (proj_name+'_grad_2s.png')
-            filename_1s = pathlib.Path(GRADIENT_INVERSION_PATH) / (proj_name+'_grad_1s.png')
+            filename_2s = (pathlib.Path(GRADIENT_INVERSION_PATH) / (proj_name+'_grad_2s.png')).resolve()
+            filename_1s = (pathlib.Path(GRADIENT_INVERSION_PATH) / (proj_name+'_grad_1s.png')).resolve()
 
             print('Debug information: ')
-            print('Filename 1s: ', filename_1s.absolute())
-            print('Filename 2s: ', filename_2s.absolute())
+            print('Filename 1s: ', filename_1s)
+            print('Filename 2s: ', filename_2s)
 
             if filename_2s.exists():
                 url = GRADIENT_INVERSION_URL / (proj_name + '_grad_2s.png')
             if filename_1s.exists():    
                 url = GRADIENT_INVERSION_URL / (proj_name + '_grad_1s.png')
             else:
+                print('None of the files exist')
                 url = GRADIENT_INVERSION_URL / ('no_inversion.png')
             layout = html.Img(src=str(url), width='100%')
 

@@ -101,8 +101,6 @@ ls_measure[idx] = np.nan
 ls_measure[~idx] = 0
 ls_measure.name = 'Start measure'
 
-#ipdb.set_trace()
-
 
 # =====================================================================
 # Function definitions
@@ -149,8 +147,8 @@ def get_figure(xrange):
     timeline['Time'] = pd.to_datetime(timeline['Time'])
 
     # Convert pandas.Timestamp to string
-    timeline['Time'] = timeline['Time'].dt.strftime('%Y-%m-%d %H:%M:%S')
-    fig.add_trace(go.Scatter(x=times, y=timeline['Value'], mode='lines', name='Measuring',
+    timeline_times = timeline['Time'].dt.strftime('%Y-%m-%d %H:%M:%S')
+    fig.add_trace(go.Scatter(x=timeline_times, y=timeline['Value'], mode='lines', name='Measuring',
                              line=dict(color='Blue',
                                        width=12)
                             ),
@@ -297,6 +295,17 @@ card3 = dbc.CardGroup(
 LAYOUT = html.Div([
     html.Div([dcc.Store(id='memory-store', data={'log_lines_count': 0, 'log_line_focus': 0}),]),
     html.Div([
+        dbc.Container([
+            dbc.Row([
+                html.H1("QEQ-ERT-02 Debug information"),
+                html.Hr(),
+                html.P("Page displays information on battery leve, instrument power-on intervals, and acquisition periods. Upon clicking the axes within an acquisition period (blue segments), data about acquisition settings and relevant lines from the log will be displayed.", className="lead"),
+                html.P("Be patient, page loading is slow due to the large amounts of data.", className="lead"),
+                html.P("Wait for cursor to change to a cross before clicking on the graph.", style={'font-weight': 'bold'}),
+                html.P("Use drop-down list to change the time range displayed. Use zoom and pan for additional navigation.", className="lead"),
+                html.P("Click the two lower time-lines (Power-on and Aquisition intervals) to show acquisition parameters and log text.", className="lead"),
+            ]),
+        ]),
         dbc.Container([
             dbc.Row([
                 dbc.Col([card1], md=12),
@@ -467,6 +476,9 @@ def display_click_data(clickData):
     id = (task_info_df['last_log_event']>=xval) & (task_info_df['first_log_event']<=xval)
     print(task_info_df.loc[id].values)
     
+    if not any(id):
+        return None
+
     data = [{'Parameter': p, 'Value': v} for p,v in zip(task_info_df.columns, task_info_df.loc[id].values[0])]
     return data
                       
@@ -506,7 +518,9 @@ def display_log_lines(clickData, ts, data):
     print('Focus on LineID: {0}'.format(log_line_focus))
     
     # now get first entry on this date
-    this_date_rows = log_df[log_df['Time'].astype('datetime64[D]')==np.datetime64(xval).astype('datetime64[D]')]
+    
+    this_date_rows = log_df[log_df['Time'].dt.date == np.datetime64(xval, 'D').astype('datetime64[D]').astype(object)]
+    #this_date_rows = log_df[log_df['Time'].astype('datetime64[D]')==np.datetime64(xval).astype('datetime64[D]')]
     if len(this_date_rows) > 0:
         first_line = this_date_rows.iloc[0]['LineID']
         last_line = this_date_rows.iloc[-1]['LineID']

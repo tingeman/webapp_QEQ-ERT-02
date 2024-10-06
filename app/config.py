@@ -1,6 +1,7 @@
-from pathlib import Path
+from pathlib import Path,PurePosixPath
 from pydantic import Field
 from pydantic_settings import BaseSettings
+from typing import Optional
 from dotenv import load_dotenv
 import os
 
@@ -13,12 +14,13 @@ class RunServerSettings(BaseSettings):
 
 class ConfigSettings(BaseSettings):
     GRADIENT_INVERSION_PATH: Path = Field(..., env="GRADIENT_INVERSION_PATH")
-    GRADIENT_INVERSION_URL: Path = Field(..., env="GRADIENT_INVERSION_URL")
+    GRADIENT_INVERSION_URL: PurePosixPath = Field(..., env="GRADIENT_INVERSION_URL")
     TASK_INFO_FILE: Path = Field(..., env="TASK_INFO_FILE")
     BAT_STATS_FILE: Path = Field(..., env="BAT_STATS_FILE")
     LS_LOG_FILE: Path = Field(..., env="LS_LOG_FILE")
     SUPPLY_DAT_FTR_FILE: Path = Field(..., env="SUPPLY_DAT_FTR_FILE")
     COMPLETED_PCT: float = Field(..., env="COMPLETED_PCT")
+    FLASK_STATICS_FOLDER: Optional[Path] = Field(None, env="FLASK_STATICS_FOLDER")
 
     class Config:
         env_file = ".env"
@@ -27,6 +29,7 @@ class ConfigSettings(BaseSettings):
 def load_environment():
     env = os.getenv('APP_ENV', 'production')
     env_file = f".env.{env}"
+    print(f"Loading environment from {env_file} file...")
     
     if not os.path.exists(env_file):
         if os.path.exists(".env.example"):

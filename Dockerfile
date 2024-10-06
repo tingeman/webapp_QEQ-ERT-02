@@ -4,7 +4,7 @@ FROM python:3.12-slim
 ENV DASH_DEBUG_MODE False
 
 # Create the plotly user with UID 30000
-RUN adduser --disabled-password --no-create-home --uid 30000 plotly
+RUN adduser --disabled-password --uid 30000 plotly
 
 # Update and install relevant packages
 RUN apt-get update && apt-get install -y sudo curl nano wget unzip git   \
